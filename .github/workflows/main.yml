@@ -1,7 +1,7 @@
 name: Build Windows CUDA (3080)
 
 on:
-  workflow_dispatch:  # 支持手动触发
+  workflow_dispatch:
   push:
     branches: [ main ]
 
@@ -16,7 +16,7 @@ jobs:
       - name: Install CUDA Toolkit
         uses: Jimver/cuda-toolkit@v0.2.21
         with:
-          cuda: '12.4.0'          # 与 3080 驱动兼容的稳定版本
+          cuda: '12.4.0'
           method: 'network'
           sub-packages: '["nvcc", "cudart"]'
 
@@ -24,13 +24,7 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
 
       - name: Configure CMake
-        run: |
-          cmake -S . -B build `
-            -DGGML_CUDA=ON `
-            -DGGML_CUDA_FA_ALL_QUANTS=ON `
-            -DCMAKE_CUDA_ARCHITECTURES=86 `
-            -DCMAKE_BUILD_TYPE=Release `
-            -G "Ninja"
+        run: cmake -S . -B build -DGGML_CUDA=ON -DGGML_CUDA_FA_ALL_QUANTS=ON -DCMAKE_CUDA_ARCHITECTURES=86 -DCMAKE_BUILD_TYPE=Release -G "Ninja"
 
       - name: Build llama-server
         run: cmake --build build --config Release --target llama-server -j
