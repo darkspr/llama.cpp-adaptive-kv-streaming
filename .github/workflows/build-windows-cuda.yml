@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-windows-cuda:
-    runs-on: windows-latest
+    runs-on: windows-2022  # 关键修改：使用 VS 2022 而非 VS 2026
 
     steps:
       - name: Checkout repository
